@@ -1,4 +1,4 @@
-import { Badge, Input } from 'antd';
+import { Badge, Input, message } from 'antd';
 import {
     SearchOutlined,
     HomeOutlined,
@@ -9,11 +9,19 @@ import {
     LogoutOutlined
 } from '@ant-design/icons';
 
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 const Header = () => {
     const cart = useSelector((state) => state.cart);
+    const Navigate = useNavigate();
+    const logOut = () => {
+        if(window.confirm("Are you sure Logging Out!")) {
+            localStorage.removeItem("posUser");
+            Navigate("/login");
+            message.success("Logged Out!");
+        }
+    }
 
     return (
         <div className="border-b mb-6">
@@ -53,10 +61,12 @@ const Header = () => {
                         <BarChartOutlined className='md:text-2xl text-xl' />
                         <span className='md:text-xs text-[10px]'>Statistics</span>
                     </Link>
-                    <Link to={"/"} className='menu-link flex flex-col items-center hover:text-[#40a9ff] transition-all'>
+                    <div onClick={logOut}>
+                        <Link className='menu-link flex flex-col items-center hover:text-[#40a9ff] transition-all' >
                         <LogoutOutlined className='md:text-2xl text-xl' />
                         <span className='md:text-xs text-[10px]'>Logout</span>
                     </Link>
+                    </div>
                 </div>
                 <Badge count={5} offset={[3, 0]} className='md:hidden flex'>
                     <Link to={"/cart"} className='menu-link flex flex-col items-center hover:text-[#40a9ff] transition-all'>
